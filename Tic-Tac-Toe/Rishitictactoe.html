@@ -1,0 +1,221 @@
+<center>
+<form name=game>
+<table border=0>
+<td>
+<table border=1>
+<tr>
+<td><a href="javascript:yourChoice(0,0,'A')"><img src="blank.jpg" border=0 height=100 width=100 name=A alt="Top-Left"></a></td>
+<td><a href="javascript:yourChoice(0,1,'B')"><img src="blank.jpg" border=0 height=100 width=100 name=B alt="Top-Center"></a></td>
+<td><a href="javascript:yourChoice(0,2,'C')"><img src="blank.jpg" border=0 height=100 width=100 name=C alt="Top-Right"></a></td>
+</tr>
+<tr>
+<td><a href="javascript:yourChoice(1,0,'D')"><img src="blank.jpg" border=0 height=100 width=100 name=D alt="Middle-Left"></a></td>
+<td><a href="javascript:yourChoice(1,1,'E')"><img src="blank.jpg" border=0 height=100 width=100 name=E alt="Middle-Center"></a></td>
+<td><a href="javascript:yourChoice(1,2,'F')"><img src="blank.jpg" border=0 height=100 width=100 name=F alt="Middle-Right"></a></td>
+</tr>
+<tr>
+<td><a href="javascript:yourChoice(2,0,'G')"><img src="blank.jpg" border=0 height=100 width=100 name=G alt="Bottom-Left"></a></td>
+<td><a href="javascript:yourChoice(2,1,'H')"><img src="blank.jpg" border=0 height=100 width=100 name=H alt="Bottom-Center"></a></td>
+<td><a href="javascript:yourChoice(2,2,'I')"><img src="blank.jpg" border=0 height=100 width=100  name=I alt="Bottom-Right"></a></td>
+</tr>
+</table>
+</td>
+<td>
+<table>
+<tr><td><input type=text size=5 name=Player1></td><td>Player1</td></tr>
+<tr><td><input type=text size=5 name=Player2></td><td>Player2</td></tr>
+<tr><td><input type=text size=5 name=ties></td><td>Ties</td></tr>
+</table>
+</td>
+</table>
+<input type=button value="Play Again" onClick="beginGame1();">
+&nbsp;&nbsp;
+<input type=button value="Game Help" onClick="help();">
+&nbsp;&nbsp;
+<input type=button value="Quit Game" onClick="quitGame();">
+</form>
+</center>
+
+
+
+<SCRIPT LANGUAGE="JavaScript">
+var board= new Array(); // an array of "whatever"
+board[0]= new Array("-","-","-");
+board[1]= new Array("-","-","-");
+board[2]= new Array("-","-","-");
+var currentPlayerMark ="x";
+var wn = 0;
+var ls = 0;
+var ts = 0;
+function isBoardFull() {
+    var isFull = true;
+    for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+            if (board[i][j] == '-') {
+                isFull = false;
+            }
+        }
+    }
+    return isFull;
+}
+
+//Returns true if there is a win, false otherwise.
+//This calls our other win check functions to check the entire board.
+function checkForWin() {
+    if(checkRowsForWin()!="N"){	
+        if(checkRowsForWin()=="P1"){
+            wn++;
+        }
+        if(checkRowsForWin()=="P2") {
+            ls++;
+        }
+        document.game.Player1.value = wn;
+        document.game.Player2.value = ls;
+        document.game.ties.value = ts;
+        return true
+    }
+    if (checkColumnsForWin()!="N"){	
+		if(checkColumnsForWin()=="P1") {
+            wn++
+        }
+		if(checkColumnsForWin()=="P2"){
+            ls++
+        }
+        document.game.Player1.value = wn;
+        document.game.Player2.value = ls;
+        document.game.ties.value = ts;
+		return true
+    }
+    if (checkDiagonalsForWin()!="N"){
+        if(checkDiagonalsForWin()=="P1") {
+            wn++
+        }
+        if(checkDiagonalsForWin()=="P2") {
+            ls++
+        }
+        document.game.Player1.value = wn;
+        document.game.Player2.value = ls;
+        document.game.ties.value = ts;
+        return true
+    }
+    return false
+}
+
+
+
+//Loop through rows and see if any are winners.
+function checkRowsForWin() {
+    for (var i = 0; i < 3; i++) {
+        if (checkRowCol(board[i][0], board[i][1], board[i][2]) == true) {
+            return board[i][0];
+        }
+    }
+    return "N";
+}
+
+//Loop through columns and see if any are winners.
+function checkColumnsForWin() {
+    for (var i = 0; i < 3; i++) {
+        if (checkRowCol(board[0][i], board[1][i], board[2][i]) == true) {
+            return board[0][i];
+        }
+    }
+    return "N";
+}
+
+
+//Check the two diagonals to see if either is a win. Return true if either wins.
+function checkDiagonalsForWin() {
+    if( (checkRowCol(board[0][0], board[1][1], board[2][2]) == true) ){
+        return board[0][0]
+    }
+    if (checkRowCol(board[0][2], board[1][1], board[2][0]) == true){
+        return board[0][2]
+    } else {
+        return "N"; 
+    }
+}
+
+
+//Check to see if all three values are the same (and not empty) indicating a win.
+function checkRowCol( c1,  c2, c3) {
+    if( c1!="-" && ( c1 == c2) &&( c2==c3)) {
+        return true;
+    } else {
+        return false;
+    }	
+}
+
+function beginGame1(){
+	alert("begin game");
+	alert(wn);
+	if (wn+ls+ts >= 5) {
+        alert("Game is over And the winner won  " );
+    }
+	var blank = "blank.jpg";
+	board[0]= new Array("-","-","-");
+	board[1]= new Array("-","-","-");
+	board[2]= new Array("-","-","-");
+	document.images.A.src= blank;
+	document.images.B.src= blank;
+	document.images.C.src= blank;
+	document.images.D.src= blank;
+	document.images.E.src= blank;
+	document.images.F.src= blank;
+	document.images.G.src= blank;
+	document.images.H.src= blank;
+	document.images.I.src= blank;
+}
+
+function yourChoice(a,b,ch){
+	if( board[a][b] == "-"){
+        if (currentPlayerMark == "x") {
+            document.images[ch].src = "xx.jpg";
+            board[a][b]="P1";
+        } else {
+            document.images[ch].src = "cc.jpg";
+            board[a][b]="P2";
+        }
+		if (checkForWin()) {
+            alert("We have a winner! Congrats!");
+			changePlayer()
+			beginGame1()
+			return;
+        } else if (isBoardFull()) {
+			alert("Appears we have a draw!");
+			ts++
+            document.game.Player1.value = wn;
+            document.game.Player2.value = ls;
+            document.game.ties.value = ts;
+            changePlayer()
+			beginGame1()
+			return;
+        }
+        changePlayer()
+    } else {
+        taken()
+	}
+	
+}
+
+function taken() {
+    alert("That square is already occupied.  Please select another square.")
+}
+
+function ended() {
+    alert("The game has already ended. To play a new game click the Play Again button.")
+}
+function help() {
+	alert("Welcome to Tic-Tac-Toe!  You play as the X's and the computer is the O's.  Select the square you want to put your X into by clicking them.  You cannot occupy a square that is already occupied. The first player to get three squares in a row wins.  Good Luck!!")
+}
+	
+//Change player marks back and forth.
+function changePlayer() {
+    if (currentPlayerMark == "x") {
+        currentPlayerMark = "o";
+    } else {
+        currentPlayerMark = "x";
+    }
+}
+
+</script>
